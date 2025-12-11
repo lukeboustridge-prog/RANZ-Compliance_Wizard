@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RANZ Compliance Master Tool</title>
+    <title>RANZ Compliance Wizard</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -143,6 +143,35 @@
             padding-top: 5px;
         }
 
+        /* --- TERMS BOX --- */
+        .terms-container {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 1rem;
+            font-size: 0.85rem;
+            color: #555;
+            height: 150px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+
+        .terms-check-wrapper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #eef4f8;
+            border-radius: 4px;
+        }
+
+        .terms-check-wrapper input {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            display: block; /* Override hidden default */
+        }
+
         /* --- LEGISLATION BREAKDOWN STYLES --- */
         .leg-block {
             border: 1px solid #eee;
@@ -193,6 +222,8 @@
         }
         .btn-next { background-color: var(--ranz-blue); color: white; }
         .btn-next:hover { background-color: #002a4d; }
+        .btn-next:disabled { background-color: #ccc; cursor: not-allowed; }
+        
         .btn-back { background-color: #e9ecef; color: #333; }
         .btn-back:hover { background-color: #dbe2e8; }
 
@@ -209,7 +240,7 @@
 <header>
     <div class="diagonal-accent"></div>
     <div class="header-content">
-        <h1>Compliance Master</h1>
+        <h1>Compliance Wizard</h1>
         <p class="subtitle">Consent, Licensing & LBP Obligations</p>
     </div>
 </header>
@@ -217,13 +248,28 @@
 <div class="container">
 
     <div class="card active" id="stepIntro">
-        <h2>Welcome to the RANZ Compliance Master</h2>
+        <h2>Welcome to the RANZ Compliance Wizard</h2>
+        
         <div class="intro-box">
-            <p>This tool is designed to help Roofers, LBPs, and Homeowners determine their obligations under the <strong>Building Act 2004</strong> and the <strong>LBP Rules</strong>.</p>
-            <p>Throughout this tool, you will see <strong>Case Law Alerts</strong>. These are based on real, upheld complaints from the <strong>Building Practitioners Board (BPB)</strong>. They highlight specific actions that have resulted in fines, censure, or disciplinary action for other roofers.</p>
-            <div style="margin-top:1rem;">
-                <button class="btn btn-next" id="btn-intro-start">Start Assessment</button>
-            </div>
+            <p>This tool helps Roofers, LBPs, and Homeowners determine their obligations under the <strong>Building Act 2004</strong> and the <strong>LBP Rules</strong>.</p>
+            <p>Throughout this tool, you will see <strong>Case Law Alerts</strong> based on real, upheld complaints from the <strong>Building Practitioners Board (BPB)</strong>.</p>
+        </div>
+
+        <h3>Terms & Conditions of Use</h3>
+        <div class="terms-container">
+            <p><strong>1. No Data Storage or Verification:</strong> The Roofing Association of New Zealand (RANZ) does not see, store, keep, endorse, or verify any of the information you enter into this tool. All data is processed locally on your device.</p>
+            <p><strong>2. Membership Status:</strong> Usage of this tool does not imply that the user is a member of RANZ. Just because someone is using this application does not mean they are a RANZ member. To verify membership, you must check the official directory at <a href="https://ranz.co.nz" target="_blank">ranz.co.nz</a>.</p>
+            <p><strong>3. Not Legal Advice:</strong> This tool is a guide based on the Building Act 2004 and BPB decisions. It is not a substitute for professional legal advice or specific guidance from your local Building Consent Authority (BCA).</p>
+            <p><strong>4. Liability:</strong> RANZ accepts no liability for actions taken based on the outputs of this tool.</p>
+        </div>
+
+        <div class="terms-check-wrapper">
+            <input type="checkbox" id="terms-check">
+            <label for="terms-check"><strong>I have read and accept these Terms & Conditions.</strong><br><span style="font-size:0.85rem; color:#666;">I understand RANZ does not verify this data and usage does not prove membership.</span></label>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-next" id="btn-intro-start" disabled>Start Assessment</button>
         </div>
     </div>
 
@@ -293,7 +339,7 @@
         <h2>Step 1b: Age & Durability</h2>
         <div class="info-box">
             <div class="box-title">The 15-Year Rule (Durability)</div>
-            Under <strong>Schedule 1</strong>, a repair/replacement is NOT exempt if the component has failed to satisfy the Building Code durability provisions (Clause B2) (usually 15 years for roofing).
+            Under <strong>Schedule 1</strong>, a repair is NOT exempt if the component has failed to satisfy the Building Code durability provisions (Clause B2) (usually 15 years for roofing).
         </div>
 
         <p><strong>How old is the current roof?</strong></p>
@@ -494,6 +540,14 @@
             supervision: null,
             completion: null
         };
+
+        // --- TERMS & CONDITIONS CHECKBOX LOGIC ---
+        var termsCheck = document.getElementById('terms-check');
+        var startBtn = document.getElementById('btn-intro-start');
+
+        termsCheck.addEventListener('change', function() {
+            startBtn.disabled = !this.checked;
+        });
 
         // --- EXPLANATION DATA ---
         const explanations = {
