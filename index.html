@@ -21,11 +21,11 @@
             color: var(--ranz-charcoal);
             margin: 0;
             padding: 0;
-            line-height: 1.5; /* Compact line height */
+            line-height: 1.5;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            font-size: 15px; /* Compact font size */
+            font-size: 15px;
         }
 
         /* --- LOGO BAR --- */
@@ -44,7 +44,7 @@
             color: white;
             position: relative;
             overflow: hidden;
-            height: 140px; /* Reduced height */
+            height: 140px;
             padding-top: 1.5rem;
             flex-shrink: 0;
         }
@@ -75,7 +75,7 @@
         /* --- MAIN CONTAINER --- */
         .container {
             max-width: 800px;
-            margin: -30px auto 2rem; /* Overlap header */
+            margin: -30px auto 2rem;
             position: relative;
             z-index: 3;
             padding: 0 1rem;
@@ -274,7 +274,7 @@
         <p><strong>What is the nature of the work?</strong></p>
         <div class="option-group">
             <label><input type="radio" name="scope" value="new"><div class="radio-label"><span class="option-title">A. New Build or Extension</span><span class="option-desc">New footprint or structural extension.</span></div></label>
-            <label><input type="radio" name="scope" value="replace_same"><div class="radio-label"><span class="option-title">B. Like-for-Like Replacement</span><span class="option-desc">Same materials, same position.</span></div></label>
+            <label><input type="radio" name="scope" value="replace_same"><div class="radio-label"><span class="option-title">B. Like-for-Like Replacement</span><span class="option-desc">Same position, comparable materials.</span></div></label>
             <label><input type="radio" name="scope" value="replace_change"><div class="radio-label"><span class="option-title">C. Replacement with Design Changes</span><span class="option-desc">e.g. Removing parapets, changing pitch.</span></div></label>
         </div>
         <div class="actions">
@@ -344,8 +344,8 @@
         </div>
         <p><strong>Is this a Residential building?</strong></p>
         <div class="option-group">
-            <label><input type="radio" name="b_type" value="residential"><div class="radio-label"><span class="option-title">Residential</span><span class="option-desc">House or small apartment.</span></div></label>
-            <label><input type="radio" name="b_type" value="commercial"><div class="radio-label"><span class="option-title">Commercial / Industrial</span><span class="option-desc">Office, warehouse, etc.</span></div></label>
+            <label><input type="radio" name="b_type" value="residential"><div class="radio-label"><span class="option-title">Yes (House / Apartment)</span><span class="option-desc">Restricted Building Work rules apply.</span></div></label>
+            <label><input type="radio" name="b_type" value="commercial"><div class="radio-label"><span class="option-title">No (Commercial / Industrial)</span><span class="option-desc">Warehouses, offices, etc.</span></div></label>
         </div>
         <div class="actions">
             <button class="btn btn-back" onclick="showStep('step0')">Back</button>
@@ -416,6 +416,7 @@
         </div>
         <p><strong>What is the job status?</strong></p>
         <div class="option-group">
+            <label><input type="radio" name="completion" value="in_progress"><div class="radio-label"><span class="option-title">Work in Progress (No Issues)</span></div></label>
             <label><input type="radio" name="completion" value="finished"><div class="radio-label"><span class="option-title">Job Completed Normally</span></div></label>
             <label><input type="radio" name="completion" value="dispute"><div class="radio-label"><span class="option-title">Dispute / Payment Issue</span></div></label>
             <label><input type="radio" name="completion" value="terminated"><div class="radio-label"><span class="option-title">Contract Terminated / Walked Off</span></div></label>
@@ -428,15 +429,13 @@
 
     <div class="card" id="stepResults">
         <div id="result-banner" class="result-banner"></div>
-        
         <h3>Critical Compliance Checklist:</h3>
         <ul class="checklist" id="final-checklist"></ul>
-        
         <div id="warnings-section" style="margin-top: 2rem;"></div>
-
+        
         <div class="leg-breakdown-area">
             <h3>Legislation & Rules Breakdown</h3>
-            <p style="margin-bottom:1rem; font-size:0.9rem; color:#666;">Explanation of the questions asked based on the Building Act 2004 and BPB Case Law.</p>
+            <p style="margin-bottom:1rem; font-size:0.85rem; color:#666;">Detailed reference for the logic applied to your assessment.</p>
             <div id="legislation-breakdown"></div>
         </div>
 
@@ -504,7 +503,8 @@
                 question: "Completion & Record of Work",
                 finished: { ref: "Building Act 2004, Section 88", text: "<strong>Section 88:</strong> Each LBP who carries out RBW must provide a Record of Work to the Owner and the Territorial Authority on completion." },
                 dispute: { ref: "Moyes [2025] BPB 26670", text: "<strong>Case Law:</strong> 'A Record of Work is a statutory requirement, not a negotiable term of a contract.' Withholding it due to payment disputes is a disciplinary offence." },
-                terminated: { ref: "McKinstry [2023] BPB 26342", text: "<strong>Definition of Completion:</strong> The Board clarified that 'Completion' means the date your engagement ended. Even if the roof isn't finished, you must provide a RoW for the work you did complete." }
+                terminated: { ref: "McKinstry [2023] BPB 26342", text: "<strong>Definition of Completion:</strong> The Board clarified that 'Completion' means the date your engagement ended. Even if the roof isn't finished, you must provide a RoW for the work you did complete." },
+                in_progress: { ref: "Best Practice", text: "Work ongoing. Maintain compliant supervision levels until completion." }
             }
         };
 
@@ -608,7 +608,7 @@
             if(isReq) reasons.push("<strong>LBP Required:</strong> Restricted Building Work.");
             else reasons.push("<strong>No LBP Mandate:</strong> (But recommended).");
 
-            if(state.consent_status==='no_check' && isReq) warnings.push('<div class="case-study-box"><span class="box-title">Danger</span>Check consent immediately (Corbett-Pearson).</div>');
+            if(state.consent_status==='no_check' && isReq) warnings.push('<div class="case-study-box"><span class="box-title">Danger</span>Failing to check for consent is negligence (<em>Corbett-Pearson</em>). Verify now.</div>');
 
             document.getElementById('final-checklist').innerHTML = reasons.map(r=>"<li>"+r+"</li>").join('');
             document.getElementById('warnings-section').innerHTML = warnings.join('');
@@ -625,22 +625,39 @@
                 banner.innerHTML="<h1>COMMERCIAL: LBP NOT MANDATED</h1>";
                 reasons.push("Commercial work is generally not RBW.");
             } else {
-                // RESIDENTIAL PATH
+                // Residential Logic
                 if(state.discovery==='structural') {
                     banner.className="result-banner res-consent";
-                    banner.innerHTML="<h1>LBP REQUIRED</h1><p>Structural Work</p>";
+                    banner.innerHTML="<h1>LBP REQUIRED</h1><p>Structural Work Discovered (RBW)</p>";
                 } else {
                     banner.className="result-banner res-consent";
-                    banner.innerHTML="<h1>LBP REQUIRED</h1><p>Residential Roofing is RBW</p>";
+                    banner.innerHTML="<h1>LBP REQUIRED</h1><p>Residential Roofing is Restricted Building Work</p>";
                 }
                 reasons.push("<strong>Residential Rule:</strong> Work on the primary structure or weathertightness of a house is Restricted Building Work (RBW). It must be supervised by an LBP.");
             }
 
-            if(state.variation==='yes') warnings.push('<div class="case-study-box"><span class="box-title">Variation Risk</span>Get Form 45A approval (Langdon).</div>');
-            if(state.supervision==='remote') warnings.push('<div class="case-study-box"><span class="box-title">Supervision Risk</span>Inspect physically (Horrack).</div>');
-            if(state.completion==='dispute') warnings.push('<div class="case-study-box"><span class="box-title">Record of Work</span>Issue RoW immediately (Moyes).</div>');
-
-            if(state.b_type==='residential') reasons.push("<strong>General:</strong> Send RoW to Owner & Council.");
+            if(state.variation==='yes') warnings.push('<div class="case-study-box"><span class="box-title">Variation Risk</span>Unapproved changes = Fines (<em>Langdon</em>). Apply for Minor Variation (Form 45A).</div>');
+            
+            if(state.discovery==='structural') {
+                reasons.push("<strong>Structural Finding:</strong> Replacing substrate/purlins is RBW. New work MUST meet current code (s112).");
+            }
+            
+            if(state.supervision==='remote') {
+                warnings.push('<div class="case-study-box"><span class="box-title">Supervision Risk</span>Remote supervision requires physical inspection (<em>Horrack</em>).</div>');
+                reasons.push("<strong>Action:</strong> Schedule a physical site inspection immediately.");
+            }
+            
+            if(state.completion==='dispute') {
+                warnings.push('<div class="case-study-box"><span class="box-title">Record of Work</span>Do not withhold RoW for payment (<em>Moyes</em>).</div>');
+                if(state.b_type === 'residential') reasons.push("<strong>Action:</strong> Issue Record of Work immediately.");
+            } else if(state.completion==='terminated') {
+                 if(state.b_type === 'residential') reasons.push("<strong>Action:</strong> Issue RoW for work done so far (<em>McKinstry</em>).");
+            } else if(state.completion === 'in_progress') {
+                reasons.push("<strong>Status:</strong> Work in progress. Maintain compliant supervision.");
+                if(state.b_type === 'residential') reasons.push("<strong>Reminder:</strong> Issue Record of Work upon completion.");
+            } else {
+                if(state.b_type === 'residential') reasons.push("<strong>General:</strong> Send RoW to Owner AND Council.");
+            }
 
             document.getElementById('final-checklist').innerHTML = reasons.map(r=>"<li>"+r+"</li>").join('');
             document.getElementById('warnings-section').innerHTML = warnings.join('');
