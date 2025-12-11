@@ -27,13 +27,29 @@
             flex-direction: column;
         }
 
+        /* --- LOGO BAR (New) --- */
+        .logo-bar {
+            background-color: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* Left align */
+        }
+
+        .logo-bar img {
+            max-height: 60px; /* Constrain height */
+            width: auto;
+            display: block;
+        }
+
         /* --- HEADER --- */
         header {
             background-color: var(--ranz-charcoal);
             color: white;
             position: relative;
             overflow: hidden;
-            height: 220px;
+            height: 180px; /* Slightly reduced as we now have a top bar */
             padding-top: 2rem;
         }
 
@@ -76,7 +92,7 @@
         /* --- CONTAINER --- */
         .container {
             max-width: 900px;
-            margin: -50px auto 2rem;
+            margin: -40px auto 2rem; /* Adjusted overlap */
             position: relative;
             z-index: 3;
             padding: 0 1rem;
@@ -220,6 +236,10 @@
 </head>
 <body>
 
+<div class="logo-bar">
+    <img src="logo.png" alt="RANZ Logo">
+</div>
+
 <header>
     <div class="diagonal-accent"></div>
     <div class="header-content">
@@ -268,7 +288,6 @@
         <div class="case-study-box">
             <div class="box-title">Design Changes = No Exemption</div>
             In <em>Newton [2023]</em>, a roofer replaced a dormer but removed parapets. The Board ruled this was <strong>not</strong> "like-for-like". If you change the design, Schedule 1 does not apply.
-            <div class="citation">Newton [2023] BPB CB26223</div>
         </div>
         <p><strong>What is the nature of the work?</strong></p>
         <div class="option-group">
@@ -338,7 +357,7 @@
         <h2>Execution: Building Type</h2>
         <div class="info-box">
             <div class="box-title">Restricted Building Work</div>
-            RBW rules specifically apply to <strong>residential</strong> buildings (houses and small-to-medium apartments). Commercial work has different supervision rules.
+            RBW rules specifically apply to <strong>residential</strong> buildings (houses and small-to-medium apartments).
         </div>
         <p><strong>Is this a Residential building?</strong></p>
         <div class="option-group">
@@ -485,7 +504,7 @@
             },
             discovery: {
                 question: "Unforeseen Structural Issues",
-                structural: { ref: "Building Act 2004, Section 112", text: "<strong>Section 112:</strong> Alterations must ensure the building complies with the Building Code. You cannot put a new roof on non-compliant structure. Replacing them is Restricted Building Work." },
+                structural: { ref: "Building Act 2004, Section 112", text: "<strong>Section 112:</strong> Alterations must ensure the building complies with the Building Code 'as near as is reasonably practicable'. You cannot put a new roof on non-compliant structure (e.g., rotten purlins). Replacing them is Restricted Building Work." },
                 none: { ref: "N/A", text: "No structural issues found." }
             },
             supervision: {
