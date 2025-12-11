@@ -202,7 +202,7 @@
         }
         .terms-check-wrapper input { width: 20px; height: 20px; margin-right: 10px; display: block; }
 
-        /* --- LEGISLATION BREAKDOWN (FIXED LINKS) --- */
+        /* --- LEGISLATION BREAKDOWN --- */
         .leg-block {
             border: 1px solid #e0e0e0;
             border-left: 5px solid var(--ranz-charcoal);
@@ -214,8 +214,6 @@
         }
         .leg-question { font-weight: 800; color: var(--ranz-blue); margin-bottom: 0.5rem; font-size: 0.9rem; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px; }
         .leg-ref { font-weight: 700; color: var(--ranz-red); font-size: 0.95rem; margin-bottom: 0.5rem; display: block; }
-        .leg-ref a { color: var(--ranz-red); text-decoration: none; border-bottom: 1px dotted; }
-        .leg-ref a:hover { color: var(--ranz-charcoal); }
         .leg-explain { font-size: 0.9rem; color: #444; line-height: 1.5; }
     </style>
 </head>
@@ -431,20 +429,20 @@
         var startBtn = document.getElementById('btn-intro-start');
         termsCheck.addEventListener('change', function() { startBtn.disabled = !this.checked; });
 
-        // --- ENRICHED LEGISLATIVE DATA (FIXED LINKS) ---
+        // --- ENRICHED LEGISLATIVE DATA (NO LINKS) ---
         const explanations = {
             scope: {
                 question: "Scope of Work",
                 new: { 
-                    ref: "<a href='https://www.legislation.govt.nz/act/public/2004/0072/latest/DLM306319.html' target='_blank'>Building Act 2004, Section 40</a>", 
+                    ref: "Building Act 2004, Section 40", 
                     text: "<strong>Section 40:</strong> 'A person must not carry out any building work except in accordance with a building consent.' New builds do not fit the definition of maintenance/replacement under Schedule 1." 
                 },
                 replace_same: { 
-                    ref: "<a href='https://www.legislation.govt.nz/act/public/2004/0072/latest/DLM309339.html' target='_blank'>Building Act 2004, Schedule 1, Part 1, Clause 1</a>", 
+                    ref: "Building Act 2004, Schedule 1, Part 1, Clause 1", 
                     text: "<strong>Exemption 1:</strong> Covers 'General repair, maintenance, and replacement'. Crucially, it only applies if you use 'comparable materials' in the 'same position'." 
                 },
                 replace_change: { 
-                    ref: "Building Act 2004, Schedule 1 & <em>Newton [2023]</em>", 
+                    ref: "Building Act 2004, Schedule 1 & Newton [2023]", 
                     text: "In <em>Newton [2023]</em>, the BPB ruled that removing parapets constituted a change in design/position. This voided the Schedule 1 exemption because it was no longer 'comparable replacement'. Changes to pitch, profile, or flashings often trigger this." 
                 }
             },
@@ -463,7 +461,7 @@
             age: {
                 question: "15-Year Durability Rule",
                 young: { 
-                    ref: "<a href='https://www.legislation.govt.nz/act/public/2004/0072/latest/DLM309339.html' target='_blank'>Building Act 2004, Schedule 1, Clause 1(a)(ii)</a>", 
+                    ref: "Building Act 2004, Schedule 1, Clause 1(a)(ii)", 
                     text: "<strong>The Exemption Exclusion:</strong> Schedule 1 explicitly states you CANNOT use the exemption if the component has 'failed to satisfy the provisions of the building code for durability' (i.e., failed before 15 years)." 
                 },
                 old: { 
@@ -478,14 +476,14 @@
                     text: "Building work must proceed exactly in accordance with the issued consent." 
                 },
                 no_check: { 
-                    ref: "<em>Corbett-Pearson [2024] BPB 26512</em>", 
+                    ref: "Corbett-Pearson [2024] BPB 26512", 
                     text: "<strong>Negligence Finding:</strong> The Board ruled that the LBP is in the best position to ensure unconsented work does not occur. Failing to verify the consent status before starting is a disciplinary offence." 
                 }
             },
             variation: {
                 question: "Deviations from Plans",
                 yes: { 
-                    ref: "<a href='https://www.legislation.govt.nz/act/public/2004/0072/latest/DLM306443.html' target='_blank'>Building Act 2004, Section 45A</a> & <em>Langdon [2025]</em>", 
+                    ref: "Building Act 2004, Section 45A & Langdon [2025]", 
                     text: "<strong>Section 45A:</strong> Minor variations must be approved by the BCA. In <em>Langdon [2025]</em>, an LBP was fined for using a 'better' method that wasn't on the plans. You cannot deviate without prior approval." 
                 },
                 no: { ref: "Building Act 2004", text: "Proceeding in accordance with stamped plans." }
@@ -493,7 +491,7 @@
             discovery: {
                 question: "Unforeseen Structural Issues",
                 structural: { 
-                    ref: "<a href='https://www.legislation.govt.nz/act/public/2004/0072/latest/DLM306637.html' target='_blank'>Building Act 2004, Section 112</a>", 
+                    ref: "Building Act 2004, Section 112", 
                     text: "<strong>Section 112:</strong> Alterations must ensure the building complies with the Building Code 'as near as is reasonably practicable'. You cannot put a new roof on non-compliant structure (e.g., rotten purlins). Replacing them is Restricted Building Work." 
                 },
                 none: { ref: "N/A", text: "No structural issues found." }
@@ -501,24 +499,24 @@
             supervision: {
                 question: "Supervision Requirements",
                 self: { ref: "LBP Rules", text: "Direct accountability." },
-                check: { ref: "<a href='https://www.legislation.govt.nz/act/public/2004/0072/latest/DLM306059.html' target='_blank'>Building Act 2004, Section 7</a>", text: "Meets definition of 'direction and oversight'." },
+                check: { ref: "Building Act 2004, Section 7", text: "Meets definition of 'direction and oversight'." },
                 remote: { 
-                    ref: "<em>Horrack [2024] BPB 26456</em>", 
+                    ref: "Horrack [2024] BPB 26456", 
                     text: "<strong>Supervision Definition:</strong> The Board ruled that 'Remote supervision does not mean NO supervision'. A supervisor must have knowledge of the work and carry out actual inspections. Relying solely on trust is insufficient." 
                 }
             },
             completion: {
                 question: "Completion & Record of Work",
                 finished: { 
-                    ref: "<a href='https://www.legislation.govt.nz/act/public/2004/0072/latest/DLM306538.html' target='_blank'>Building Act 2004, Section 88</a>", 
+                    ref: "Building Act 2004, Section 88", 
                     text: "<strong>Section 88:</strong> Each LBP who carries out RBW must provide a Record of Work to the Owner and the Territorial Authority on completion." 
                 },
                 dispute: { 
-                    ref: "<em>Moyes [2025] BPB 26670</em>", 
+                    ref: "Moyes [2025] BPB 26670", 
                     text: "<strong>Case Law:</strong> 'A Record of Work is a statutory requirement, not a negotiable term of a contract.' Withholding it due to payment disputes is a disciplinary offence." 
                 },
                 terminated: { 
-                    ref: "<em>McKinstry [2023] BPB 26342</em>", 
+                    ref: "McKinstry [2023] BPB 26342", 
                     text: "<strong>Definition of Completion:</strong> The Board clarified that 'Completion' means the date your engagement ended. Even if the roof isn't finished, you must provide a RoW for the work you did complete." 
                 }
             }
