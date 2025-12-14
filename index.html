@@ -692,15 +692,26 @@
             if(isReq) reasons.push("<strong>LBP Required:</strong> Restricted Building Work.");
             else reasons.push("<strong>No LBP Mandate:</strong> (But recommended).");
             
-            // Add warnings for all selected risks
-            if(state.complex.includes('solar')) warnings.push('<div class="tech-alert"><span class="box-title">Solar Risk</span>Verify structural load capacity (B1).</div>');
-            if(state.complex.includes('asbestos')) warnings.push('<div class="tech-alert"><span class="box-title">Asbestos Risk</span>Stop work. Survey required.</div>');
+            // --- EDUCATIONAL ALERTS ---
+            if(state.complex.includes('solar')) {
+                warnings.push('<div class="tech-alert"><span class="box-title">Solar & Structure (Education)</span><strong>Why it matters:</strong> Solar panels alter the structural load path. Standard roof trusses are designed for "distributed loads" (like snow or iron), not the "point loads" of solar rails. <br><br><strong>Action:</strong> You must verify the structure can take the weight (Clause B1) and that penetrations are flashed (Clause E2). If in doubt, get an engineer\'s letter.</div>');
+            }
             
-            // SKILLION / VENTILATION WARNING
-            if(state.complex.includes('skillion')) warnings.push('<div class="tech-alert"><span class="box-title">Ventilation Check</span>Skillion roofs require specific ventilation to prevent condensation (H1/E3).</div>');
+            if(state.complex.includes('asbestos')) {
+                warnings.push('<div class="tech-alert"><span class="box-title">Asbestos & The Law (Education)</span><strong>The Rule:</strong> Under the Health & Safety at Work Act, any building constructed pre-2000 is <em>presumed</em> to contain asbestos until proven otherwise.<br><br><strong>Risk:</strong> You generally cannot disturb materials (like soffits, decramastic tiles, or fibro) without a negative test. Fines for site contamination are severe.</div>');
+            }
             
-            // NEW: H1 INSULATION WARNING
-            if(state.complex.includes('h1_upgrade')) warnings.push('<div class="warning-box"><span class="box-title">H1 Height Check</span><strong>Warning:</strong> Thicker insulation often raises the roof profile. Check that your flashings still provide compliant cover (E2). If the roof plane changes height, this is a structural change (Minor Variation or Consent required).</div>');
+            if(state.complex.includes('skillion')) {
+                warnings.push('<div class="tech-alert"><span class="box-title">Skillion Ventilation (Education)</span><strong>The Physics:</strong> Skillion roofs lack a large roof cavity for air circulation. If warm, moist air from the house gets in, it gets trapped and condenses on the cold roofing iron.<br><br><strong>The Fix:</strong> Building Code (E3/H1) typically requires a 25mm continuous air gap between the insulation and the underlay to allow this moisture to escape.</div>');
+            }
+
+            if(state.complex.includes('gutter')) {
+                warnings.push('<div class="tech-alert"><span class="box-title">Internal Gutters (Education)</span><strong>Why Consent is needed:</strong> Converting an internal gutter to an external one changes the building\'s water management design (Clause E1). This is not "maintenance"; it is a modification of the building envelope.</div>');
+            }
+            
+            if(state.complex.includes('h1_upgrade')) {
+                warnings.push('<div class="warning-box"><span class="box-title">H1 Height Check</span><strong>Warning:</strong> Thicker insulation often raises the roof profile. Check that your flashings still provide compliant cover (E2). If the roof plane changes height, this is a structural change (Minor Variation or Consent required).</div>');
+            }
 
             if(state.consent_status==='no_check' && isReq) warnings.push('<div class="case-study-box"><span class="box-title">Danger</span>Failing to check for consent is negligence (<em>Corbett-Pearson</em>). Verify now.</div>');
             if(state.consent_status==='emergency') reasons.push("<strong>Action:</strong> Apply for Certificate of Acceptance (s42) immediately.");
@@ -742,9 +753,9 @@
                 reasons.push("<strong>Structural Finding:</strong> Replacing substrate/purlins is RBW. New work MUST meet current code (s112).");
             }
             
-            // NEW: SUBSTRATE LIABILITY CHECK
+            // SUBSTRATE LIABILITY - EXPANDED EDUCATION
             if (state.discovery === 'none') {
-                warnings.push('<div class="case-study-box"><span class="box-title">Substrate Liability</span><strong>Warning:</strong> In <em>Woolhouse [2024]</em>, the roofer was held liable for the builder\'s errors because they covered them up. You must inspect the substrate before covering it.</div>');
+                warnings.push('<div class="case-study-box"><span class="box-title">Substrate Liability (Education)</span><strong>Why this matters:</strong> As the specialist trade, you are the final check. In <em>Woolhouse [2024]</em>, the Board ruled that if you cover up a builder\'s mistake (like bad purlin spacing or missing tapes), you <strong>adopt that defect</strong> as your own.<br><br><strong>Advice:</strong> Always inspect the substrate before starting.</div>');
             }
             
             if (state.licence === 'no') {
@@ -770,7 +781,6 @@
                 reasons.push("<strong>General:</strong> Send RoW to Owner AND Council.");
             }
 
-            // FIXED: Correct ID targets and function name
             document.getElementById('final-checklist').innerHTML = reasons.map(r => "<li>"+r+"</li>").join('');
             document.getElementById('warnings-section').innerHTML = warnings.join('');
             renderLeg(['b_type', 'variation', 'discovery', 'licence', 'supervision', 'completion']);
