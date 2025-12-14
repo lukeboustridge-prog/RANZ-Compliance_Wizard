@@ -178,11 +178,16 @@
         }
         .radio-label:hover { border-color: var(--ranz-silver); background-color: #fafafa; }
         
+        input[type="radio"], input[type="checkbox"] { display: none; }
+        
+        /* Checked state for Radio & Checkbox */
         input:checked + .radio-label {
             border-color: var(--ranz-blue);
             background-color: #f0f7fb;
             box-shadow: 0 0 0 1px var(--ranz-blue) inset;
         }
+        
+        /* Multiple Selection Indicator */
         input[type="checkbox"]:checked + .radio-label::after {
             content: "✔ Selected";
             float: right;
@@ -190,7 +195,6 @@
             font-weight: 800;
             color: var(--ranz-blue);
         }
-        input[type="radio"], input[type="checkbox"] { display: none; }
 
         .option-title { font-weight: 700; display: block; margin-bottom: 3px; font-size: 1rem; }
         .option-desc { font-weight: 400; font-size: 0.85rem; color: #666; }
@@ -352,6 +356,7 @@
         <div class="case-study-box">
             <div class="box-title">Design Changes = No Exemption</div>
             In <em>Newton [2023]</em>, a roofer replaced a dormer but removed parapets. The Board ruled this was <strong>not</strong> "like-for-like". If you change the design, Schedule 1 does not apply.
+            <div class="citation">Newton [2023] BPB CB26223</div>
         </div>
         <p><strong>What is the nature of the work?</strong></p>
         <div class="option-group">
@@ -371,6 +376,7 @@
             <div class="box-title">High Risk Areas</div>
             Select <strong>ALL</strong> that apply. These scenarios often trigger Code issues (E1/E2/H1/Structural) even in "maintenance" jobs.
         </div>
+        <p><strong>Does the job involve any of these specific scenarios?</strong></p>
         <div class="option-group">
             <label><input type="checkbox" name="complex" value="gutter" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Internal Gutter -> External Conversion</span><span class="option-desc">Changing drainage system design (E1/E2).</span></div></label>
             <label><input type="checkbox" name="complex" value="skillion" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Skillion Roof (No Cavity)</span><span class="option-desc">Risk of condensation if ventilation not added.</span></div></label>
@@ -406,7 +412,8 @@
         <h2>Step 2: Consent Status</h2>
         <div class="case-study-box">
             <div class="box-title">Duty to Check</div>
-            In <em>Corbett-Pearson [2024]</em>, a roofer assumed a consent was in place but didn't check. The Board ruled the LBP is in the best position to stop unconsented work.
+            In <em>Corbett-Pearson [2024]</em>, a roofer assumed a consent was in place but didn't check. The Board ruled the LBP is in the best position to stop unconsented work and failing to check is negligent.
+            <div class="citation">Corbett-Pearson [2024] BPB 26512</div>
         </div>
         <p><strong>Has a Consent been issued?</strong></p>
         <div class="option-group">
@@ -442,6 +449,7 @@
         <div class="case-study-box">
             <div class="box-title">"My way is better" Trap</div>
             In <em>Langdon [2025]</em>, a roofer was fined for using a "better" method without approval. In <em>Smith [2023]</em>, product substitution was a key issue.
+            <div class="citation">Langdon [2025] BPB 26658</div>
         </div>
         <p><strong>Are you deviating from the Plans, altering an existing configuration, or substituting products?</strong></p>
         <div class="option-group">
@@ -494,6 +502,7 @@
         <div class="case-study-box">
             <div class="box-title">Remote Supervision</div>
             In <em>Horrack [2024]</em>, the Board ruled "Remote supervision does not mean NO supervision".
+            <div class="citation">Horrack [2024] BPB 26456</div>
         </div>
         <p><strong>How are you supervising this job?</strong></p>
         <div class="option-group">
@@ -512,6 +521,7 @@
         <div class="warning-box">
             <div class="box-title">Withholding Paperwork</div>
             In <em>Moyes [2025]</em>, an LBP was fined for withholding a Record of Work due to unpaid invoices.
+            <div class="citation">Moyes [2025] BPB 26670</div>
         </div>
         <p><strong>What is the job status?</strong></p>
         <div class="option-group">
