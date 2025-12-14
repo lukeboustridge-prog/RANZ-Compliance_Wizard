@@ -804,7 +804,6 @@
 
             // 2. SKILLION VENTILATION (Generic/Educational)
             if(state.complex.includes('skillion')) {
-                // FIXED PER USER REQUEST: Expanded options, kept consent warning
                 warnings.push('<div class="tech-alert"><span class="box-title">Skillion Ventilation (Education)</span><strong>The Physics:</strong> Skillion roofs lack a large roof cavity to buffer moisture. Horizontal purlins often block the 25mm air gap, acting as a "dam" for stagnant, moist air.<br><br><strong>The Fix:</strong> You need to consider ventilation, including <strong>Counter-Battens</strong>, <strong>Vented Battens</strong>, or <strong>Fascia/Ridge Vents</strong>. <br><em><strong>Important:</strong> If this raises the roof profile (e.g. adding 20mm battens), it is a design change that likely triggers a Building Consent (RBW).</em></div>');
             }
 
@@ -870,14 +869,24 @@
                 reasons.push("<strong>Action:</strong> Schedule a physical site inspection immediately.");
             }
             
+            // COMPLETION LOGIC
             if(state.completion === 'in_progress') {
                 reasons.push("<strong>Status:</strong> Work in progress. Maintain compliant supervision.");
                 if(state.b_type === 'residential') reasons.push("<strong>Reminder:</strong> Issue Record of Work upon completion.");
+            } else if (state.completion === 'finished') {
+                // ADDED: Explicit instruction for finished jobs
+                if(state.b_type === 'residential') reasons.push("<strong>Action:</strong> Issue Record of Work (RoW) to Owner AND Council.");
             } else if (state.completion === 'dispute') {
                 warnings.push('<div class="case-study-box"><div class="box-title">Issue RoW Now</div>Do not withhold RoW for payment (<em>Moyes</em>).</div>');
-                if(state.b_type === 'residential') reasons.push("<strong>Action:</strong> Issue Record of Work immediately.");
+                if(state.b_type === 'residential') {
+                    // UPDATED: Expanded Explanation
+                    reasons.push("<strong>CRITICAL ACTION:</strong> Issue Record of Work (RoW) to the Owner & Council immediately.<br><strong>Why?</strong> Your obligation to certify RBW is statutory, not contractual. Withholding an RoW as leverage for payment is a disciplinary offence. Failing to issue it allows the client to file a valid complaint against your licence."); 
+                }
             } else if (state.completion === 'terminated') {
-                 if(state.b_type === 'residential') reasons.push("<strong>Action:</strong> Issue RoW for work done so far (<em>McKinstry</em>).");
+                 if(state.b_type === 'residential') {
+                    // UPDATED: Expanded Explanation
+                    reasons.push("<strong>CRITICAL ACTION:</strong> Issue RoW to Owner & Council for the specific work done to date.<br><strong>Why?</strong> This creates a liability 'line in the sand'. You must formally document exactly where your work stopped (<em>McKinstry</em>) to ensure you are not held responsible for non-compliant work finished by others.");
+                 }
             }
 
             if (state.b_type === 'residential') {
