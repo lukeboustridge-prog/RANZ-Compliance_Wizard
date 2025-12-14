@@ -304,6 +304,7 @@
         <div class="option-group">
             <label><input type="checkbox" name="complex" value="gutter" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Internal Gutter -> External Conversion</span><span class="option-desc">Changing drainage system design (E1/E2).</span></div></label>
             <label><input type="checkbox" name="complex" value="skillion" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Skillion Roof (No Cavity)</span><span class="option-desc">Risk of condensation if ventilation not added.</span></div></label>
+            <label><input type="checkbox" name="complex" value="h1_upgrade" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Insulation Upgrade (H1)</span><span class="option-desc">Installing thicker insulation (R6.6) or raising roof height.</span></div></label>
             <label><input type="checkbox" name="complex" value="solar" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Solar Panels</span><span class="option-desc">Adding weight/penetrations. Structural check required.</span></div></label>
             <label><input type="checkbox" name="complex" value="asbestos" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Pre-2000 / Asbestos Risk</span><span class="option-desc">Potential Health & Safety Stop Work.</span></div></label>
             <label><input type="checkbox" name="complex" value="none" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">None of the above</span><span class="option-desc">Standard re-roof or new build.</span></div></label>
@@ -517,6 +518,7 @@
                 skillion: { ref: "Building Code H1/E3", text: "Skillion roofs need ventilation to prevent condensation. Design advice recommended." },
                 solar: { ref: "Building Code B1", text: "Solar panels add weight. Structural check required." },
                 asbestos: { ref: "Health & Safety at Work Act", text: "Asbestos must be identified. Stop work order risk." },
+                h1_upgrade: { ref: "Building Code H1 / E2", text: "Upgrading insulation often increases roof depth, affecting flashing cover and building envelope height." },
                 none: { ref: "N/A", text: "Standard scope." }
             },
             age: {
@@ -693,7 +695,12 @@
             // Add warnings for all selected risks
             if(state.complex.includes('solar')) warnings.push('<div class="tech-alert"><span class="box-title">Solar Risk</span>Verify structural load capacity (B1).</div>');
             if(state.complex.includes('asbestos')) warnings.push('<div class="tech-alert"><span class="box-title">Asbestos Risk</span>Stop work. Survey required.</div>');
+            
+            // SKILLION / VENTILATION WARNING
             if(state.complex.includes('skillion')) warnings.push('<div class="tech-alert"><span class="box-title">Ventilation Check</span>Skillion roofs require specific ventilation to prevent condensation (H1/E3).</div>');
+            
+            // NEW: H1 INSULATION WARNING
+            if(state.complex.includes('h1_upgrade')) warnings.push('<div class="warning-box"><span class="box-title">H1 Height Check</span><strong>Warning:</strong> Thicker insulation often raises the roof profile. Check that your flashings still provide compliant cover (E2). If the roof plane changes height, this is a structural change (Minor Variation or Consent required).</div>');
 
             if(state.consent_status==='no_check' && isReq) warnings.push('<div class="case-study-box"><span class="box-title">Danger</span>Failing to check for consent is negligence (<em>Corbett-Pearson</em>). Verify now.</div>');
             if(state.consent_status==='emergency') reasons.push("<strong>Action:</strong> Apply for Certificate of Acceptance (s42) immediately.");
@@ -734,8 +741,10 @@
             if (state.discovery === 'structural') {
                 reasons.push("<strong>Structural Finding:</strong> Replacing substrate/purlins is RBW. New work MUST meet current code (s112).");
             }
+            
+            // NEW: SUBSTRATE LIABILITY CHECK
             if (state.discovery === 'none') {
-                 // Check if user just blindly said none
+                warnings.push('<div class="case-study-box"><span class="box-title">Substrate Liability</span><strong>Warning:</strong> In <em>Woolhouse [2024]</em>, the roofer was held liable for the builder\'s errors because they covered them up. You must inspect the substrate before covering it.</div>');
             }
             
             if (state.licence === 'no') {
@@ -761,9 +770,10 @@
                 reasons.push("<strong>General:</strong> Send RoW to Owner AND Council.");
             }
 
-           document.getElementById('final-checklist').innerHTML = reasons.map(r => "<li>"+r+"</li>").join('');
-document.getElementById('warnings-section').innerHTML = warnings.join('');
-renderLeg(['b_type', 'variation', 'discovery', 'licence', 'supervision', 'completion']);
+            // FIXED: Correct ID targets and function name
+            document.getElementById('final-checklist').innerHTML = reasons.map(r => "<li>"+r+"</li>").join('');
+            document.getElementById('warnings-section').innerHTML = warnings.join('');
+            renderLeg(['b_type', 'variation', 'discovery', 'licence', 'supervision', 'completion']);
             showStep('stepResults');
         }
     });
@@ -771,4 +781,3 @@ renderLeg(['b_type', 'variation', 'discovery', 'licence', 'supervision', 'comple
 
 </body>
 </html>
-
