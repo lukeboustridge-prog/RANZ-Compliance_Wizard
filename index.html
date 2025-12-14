@@ -154,11 +154,22 @@
         }
         .radio-label:hover { border-color: var(--ranz-silver); background-color: #fafafa; }
         
-        input[type="radio"] { display: none; }
-        input[type="radio"]:checked + .radio-label {
+        input[type="radio"], input[type="checkbox"] { display: none; }
+        
+        /* Checked state for Radio & Checkbox */
+        input:checked + .radio-label {
             border-color: var(--ranz-blue);
             background-color: #f0f7fb;
             box-shadow: 0 0 0 1px var(--ranz-blue) inset;
+        }
+        
+        /* Multiple Selection Indicator */
+        input[type="checkbox"]:checked + .radio-label::after {
+            content: "✔ Selected";
+            float: right;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--ranz-blue);
         }
 
         .option-title { font-weight: 700; display: block; margin-bottom: 3px; font-size: 1rem; }
@@ -241,6 +252,7 @@
             <p><strong>1. No Data Storage or Verification:</strong> RANZ does not see, store, keep, endorse, or verify any of the information you enter into this tool. All data is processed locally on your device.</p>
             <p><strong>2. Membership Status:</strong> Usage of this tool does not imply that the user is a member of RANZ. Just because someone is using this application does not mean they are a RANZ member. To verify membership, you must check the official directory at ranz.co.nz.</p>
             <p><strong>3. Not Legal Advice:</strong> This tool is a guide based on the Building Act 2004 and BPB decisions. It is not a substitute for professional legal advice or specific guidance from your local Building Consent Authority (BCA).</p>
+            <p><strong>4. Liability:</strong> RANZ accepts no liability for actions taken based on the outputs of this tool.</p>
         </div>
         <div class="terms-check-wrapper">
             <input type="checkbox" id="terms-check">
@@ -286,15 +298,15 @@
         <h2>Step 1b: Complex Scenarios & Risks</h2>
         <div class="tech-alert">
             <div class="box-title">High Risk Areas</div>
-            Jobs that look like "maintenance" can often trigger Code issues (E1/E2/H1/Structural).
+            Select <strong>ALL</strong> that apply. These scenarios often trigger Code issues (E1/E2/H1/Structural) even in "maintenance" jobs.
         </div>
         <p><strong>Does the job involve any of these specific scenarios?</strong></p>
         <div class="option-group">
-            <label><input type="radio" name="complex" value="gutter"><div class="radio-label"><span class="option-title">Internal Gutter -> External Conversion</span><span class="option-desc">Changing drainage system design (E1/E2).</span></div></label>
-            <label><input type="radio" name="complex" value="skillion"><div class="radio-label"><span class="option-title">Skillion Roof (No Cavity)</span><span class="option-desc">Risk of condensation if ventilation not added.</span></div></label>
-            <label><input type="radio" name="complex" value="solar"><div class="radio-label"><span class="option-title">Solar Panels</span><span class="option-desc">Adding weight/penetrations. Structural check required.</span></div></label>
-            <label><input type="radio" name="complex" value="asbestos"><div class="radio-label"><span class="option-title">Pre-2000 / Asbestos Risk</span><span class="option-desc">Potential Health & Safety Stop Work.</span></div></label>
-            <label><input type="radio" name="complex" value="none"><div class="radio-label"><span class="option-title">None of the above</span><span class="option-desc">Standard re-roof or new build.</span></div></label>
+            <label><input type="checkbox" name="complex" value="gutter" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Internal Gutter -> External Conversion</span><span class="option-desc">Changing drainage system design (E1/E2).</span></div></label>
+            <label><input type="checkbox" name="complex" value="skillion" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Skillion Roof (No Cavity)</span><span class="option-desc">Risk of condensation if ventilation not added.</span></div></label>
+            <label><input type="checkbox" name="complex" value="solar" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Solar Panels</span><span class="option-desc">Adding weight/penetrations. Structural check required.</span></div></label>
+            <label><input type="checkbox" name="complex" value="asbestos" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Pre-2000 / Asbestos Risk</span><span class="option-desc">Potential Health & Safety Stop Work.</span></div></label>
+            <label><input type="checkbox" name="complex" value="none" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">None of the above</span><span class="option-desc">Standard re-roof or new build.</span></div></label>
         </div>
         <div class="actions">
             <button class="btn btn-back" id="btn-back-complex">Back</button>
@@ -323,7 +335,8 @@
         <h2>Step 2: Consent Status</h2>
         <div class="case-study-box">
             <div class="box-title">Duty to Check</div>
-            In <em>Corbett-Pearson [2024]</em>, failing to check for a consent before starting was deemed negligence.
+            In <em>Corbett-Pearson [2024]</em>, a roofer assumed a consent was in place but didn't check. The Board ruled the LBP is in the best position to stop unconsented work and failing to check is negligent.
+            <div class="citation">Corbett-Pearson [2024] BPB 26512</div>
         </div>
         <p><strong>Has a Consent been issued?</strong></p>
         <div class="option-group">
@@ -358,11 +371,12 @@
         <h2>Execution: Making Changes</h2>
         <div class="case-study-box">
             <div class="box-title">"My way is better" Trap</div>
-            In <em>Langdon [2025]</em>, a roofer was fined for using a "better" method without approval. In <em>Smith [2023]</em>, substituting materials was a key failing.
+            In <em>Langdon [2025]</em>, a roofer was fined for using a "better" method without approval. In <em>Smith [2023]</em>, product substitution was a key issue.
+            <div class="citation">Langdon [2025] BPB 26658</div>
         </div>
         <p><strong>Are you deviating from the Plans, altering an existing configuration, or substituting products?</strong></p>
         <div class="option-group">
-            <label><input type="radio" name="variation" value="yes"><div class="radio-label"><span class="option-title">Yes</span><span class="option-desc">Changing flashings, pitch, layout, or <strong>substituting products</strong> (e.g. underlay/screws).</span></div></label>
+            <label><input type="radio" name="variation" value="yes"><div class="radio-label"><span class="option-title">Yes</span><span class="option-desc">Changing flashings, details, pitch, layout, or substituting specified products.</span></div></label>
             <label><input type="radio" name="variation" value="no"><div class="radio-label"><span class="option-title">No</span><span class="option-desc">Following the consented plans and specifications exactly.</span></div></label>
         </div>
         <div class="actions">
@@ -411,6 +425,7 @@
         <div class="case-study-box">
             <div class="box-title">Remote Supervision</div>
             In <em>Horrack [2024]</em>, the Board ruled "Remote supervision does not mean NO supervision".
+            <div class="citation">Horrack [2024] BPB 26456</div>
         </div>
         <p><strong>How are you supervising this job?</strong></p>
         <div class="option-group">
@@ -429,6 +444,7 @@
         <div class="warning-box">
             <div class="box-title">Withholding Paperwork</div>
             In <em>Moyes [2025]</em>, an LBP was fined for withholding a Record of Work due to unpaid invoices.
+            <div class="citation">Moyes [2025] BPB 26670</div>
         </div>
         <p><strong>What is the job status?</strong></p>
         <div class="option-group">
@@ -466,12 +482,26 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         
-        var state = { pathway:null, scope:null, complex:null, age:null, consent_status:null, b_type:null, variation:null, discovery:null, licence:null, supervision:null, completion:null };
+        var state = { pathway:null, scope:null, complex:[], age:null, consent_status:null, b_type:null, variation:null, discovery:null, licence:null, supervision:null, completion:null };
 
         // Terms
         var termsCheck = document.getElementById('terms-check');
         var startBtn = document.getElementById('btn-intro-start');
         termsCheck.addEventListener('change', function() { startBtn.disabled = !this.checked; });
+
+        // MULTI SELECT HELPER
+        window.handleMulti = function(el) {
+            var all = document.querySelectorAll('input[name="complex"]');
+            if(el.value === 'none') {
+                if(el.checked) {
+                    all.forEach(c => { if(c.value !== 'none') c.checked = false; });
+                }
+            } else {
+                if(el.checked) {
+                    document.querySelector('input[value="none"]').checked = false;
+                }
+            }
+        };
 
         // EXPLANATIONS (NO LINKS)
         const explanations = {
@@ -542,7 +572,7 @@
             showStep(state.pathway === 'planning' ? 'stepP1' : 'stepE0');
         });
 
-        // Planning Flow
+        // Planning
         document.getElementById('btn-back-p1').addEventListener('click', () => showStep('step0'));
         document.getElementById('btn-next-p1').addEventListener('click', () => {
             state.scope = document.querySelector('input[name="scope"]:checked')?.value;
@@ -551,8 +581,11 @@
         });
         document.getElementById('btn-back-complex').addEventListener('click', () => showStep('stepP1'));
         document.getElementById('btn-next-complex').addEventListener('click', () => {
-            state.complex = document.querySelector('input[name="complex"]:checked')?.value;
-            if(!state.complex) return alert("Select option");
+            // MULTI SELECT CAPTURE
+            var checked = document.querySelectorAll('input[name="complex"]:checked');
+            if(checked.length === 0) return alert("Select at least one option (or None)");
+            state.complex = Array.from(checked).map(c => c.value);
+            
             showStep(state.scope === 'replace_same' ? 'stepP1_Age' : 'stepP2');
         });
         document.getElementById('btn-back-age').addEventListener('click', () => showStep('stepP1_Complex'));
@@ -568,7 +601,7 @@
             calcPlanning();
         });
 
-        // Execution Flow
+        // Execution
         document.getElementById('btn-next-e0').addEventListener('click', () => {
             state.b_type = document.querySelector('input[name="b_type"]:checked')?.value;
             if(!state.b_type) return alert("Select type");
@@ -619,8 +652,17 @@
             let html = "";
             keys.forEach(k => {
                 let v = state[k];
-                if(v && explanations[k] && explanations[k][v]) {
-                    html += `<div class="leg-block"><div class="leg-question">${explanations[k].question}</div><div class="leg-ref">${explanations[k][v].ref}</div><div class="leg-explain">${explanations[k][v].text}</div></div>`;
+                // Handle array for 'complex'
+                if(Array.isArray(v)) {
+                    v.forEach(item => {
+                         if(explanations[k] && explanations[k][item]) {
+                             html += `<div class="leg-block"><div class="leg-question">${explanations[k].question} (${item})</div><div class="leg-ref">${explanations[k][item].ref}</div><div class="leg-explain">${explanations[k][item].text}</div></div>`;
+                         }
+                    });
+                } else {
+                    if(v && explanations[k] && explanations[k][v]) {
+                        html += `<div class="leg-block"><div class="leg-question">${explanations[k].question}</div><div class="leg-ref">${explanations[k][v].ref}</div><div class="leg-explain">${explanations[k][v].text}</div></div>`;
+                    }
                 }
             });
             document.getElementById('legislation-breakdown').innerHTML = html;
@@ -628,7 +670,11 @@
 
         function calcPlanning() {
             let reasons=[], warnings=[], isReq=false;
-            if(state.complex!=='none') isReq=true;
+            
+            // Check Complex Array
+            let complexHasRisk = state.complex.some(x => ['gutter'].includes(x));
+            if(complexHasRisk) isReq=true;
+            
             if(state.scope!=='replace_same') isReq=true;
             if(state.age==='young') isReq=true;
 
@@ -643,9 +689,10 @@
             
             if(isReq) reasons.push("<strong>LBP Required:</strong> Restricted Building Work.");
             else reasons.push("<strong>No LBP Mandate:</strong> (But recommended).");
-
-            if(state.complex === 'solar') warnings.push('<div class="tech-alert"><span class="box-title">Solar Risk</span>Verify structural load capacity (B1).</div>');
-            if(state.complex === 'asbestos') warnings.push('<div class="tech-alert"><span class="box-title">Asbestos Risk</span>Stop work. Survey required.</div>');
+            
+            // Add warnings for all selected risks
+            if(state.complex.includes('solar')) warnings.push('<div class="tech-alert"><span class="box-title">Solar Risk</span>Verify structural load capacity (B1).</div>');
+            if(state.complex.includes('asbestos')) warnings.push('<div class="tech-alert"><span class="box-title">Asbestos Risk</span>Stop work. Survey required.</div>');
 
             if(state.consent_status==='no_check' && isReq) warnings.push('<div class="case-study-box"><span class="box-title">Danger</span>Failing to check for consent is negligence (<em>Corbett-Pearson</em>). Verify now.</div>');
             if(state.consent_status==='emergency') reasons.push("<strong>Action:</strong> Apply for Certificate of Acceptance (s42) immediately.");
@@ -699,7 +746,10 @@
                 reasons.push("<strong>Action:</strong> Schedule a physical site inspection immediately.");
             }
             
-            if (state.completion === 'dispute') {
+            if(state.completion === 'in_progress') {
+                reasons.push("<strong>Status:</strong> Work in progress. Maintain compliant supervision.");
+                if(state.b_type === 'residential') reasons.push("<strong>Reminder:</strong> Issue Record of Work upon completion.");
+            } else if (state.completion === 'dispute') {
                 warnings.push('<div class="case-study-box"><div class="box-title">Issue RoW Now</div>Do not withhold RoW for payment (<em>Moyes</em>).</div>');
                 if(state.b_type === 'residential') reasons.push("<strong>Action:</strong> Issue Record of Work immediately.");
             } else if (state.completion === 'terminated') {
