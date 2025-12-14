@@ -193,6 +193,8 @@
         .btn-next:disabled { background-color: #ccc; cursor: not-allowed; }
         .btn-back { background-color: #e9ecef; color: #333; }
         .btn-back:hover { background-color: #dbe2e8; }
+        .btn-print { background-color: var(--ranz-charcoal); color: white; }
+        .btn-print:hover { background-color: #2c3949; }
 
         /* --- RESULTS --- */
         .result-banner { text-align: center; padding: 1.5rem; color: white; border-radius: 6px; margin-bottom: 2rem; }
@@ -223,6 +225,12 @@
         .terms-check-wrapper input { width: 20px; height: 20px; margin-right: 10px; display: block; }
         
         footer { text-align: center; padding: 2rem; font-size: 0.8rem; color: #888; }
+        
+        @media print {
+            .actions, .btn { display: none !important; }
+            .card { box-shadow: none; border: none; }
+            body { background: white; }
+        }
     </style>
 </head>
 <body>
@@ -394,9 +402,9 @@
         </div>
         <p><strong>Have you checked the substrate (purlins/ply/underlay) provided by previous trades?</strong></p>
         <div class="option-group">
-            <label><input type="radio" name="discovery" value="structural"><div class="radio-label"><span class="option-title">I found issues (Rot/Errors)</span><span class="option-desc">Requires fixing/replacement before roofing.</span></div></label>
+            <label><input type="radio" name="discovery" value="structural"><div class="radio-label"><span class="option-title">Issues Found (Rot / Code Compliance)</span><span class="option-desc">Rot, errors, or structure not up to current Code.</span></div></label>
             <label><input type="radio" name="discovery" value="checked_ok"><div class="radio-label"><span class="option-title">Checked & Compliant</span><span class="option-desc">I have verified the substrate is ready.</span></div></label>
-            <label><input type="radio" name="discovery" value="none"><div class="radio-label"><span class="option-title">I haven't checked</span><span class="option-desc">I am assuming the builder did it right.</span></div></label>
+            <label><input type="radio" name="discovery" value="none"><div class="radio-label"><span class="option-title">Not Checked Yet</span><span class="option-desc">I need to verify substrate before starting.</span></div></label>
         </div>
         <div class="actions">
             <button class="btn btn-back" id="btn-back-discovery">Back</button>
@@ -472,9 +480,10 @@
             <div id="legislation-breakdown"></div>
         </div>
 
-        <div class="actions" style="grid-template-columns: 1fr 1fr;">
+        <div class="actions" style="grid-template-columns: 1fr 1fr 1fr;">
             <button class="btn btn-back" id="btn-back-results">Back</button>
-            <button class="btn btn-next" onclick="location.reload()">Start New Assessment</button>
+            <button class="btn btn-print" onclick="window.print()">Print / Save PDF</button>
+            <button class="btn btn-next" onclick="location.reload()">Start New</button>
         </div>
     </div>
 
@@ -749,7 +758,8 @@
 
             // CHECKLIST
             if (state.b_type === 'residential') {
-                reasons.push("<strong>Residential Rule:</strong> This work is Restricted Building Work (RBW). It must be supervised by an LBP.");
+                // UPDATED PER FEEDBACK
+                reasons.push("<strong>Residential Rule:</strong> This work is Restricted Building Work (RBW). It must be supervised by an LBP, with the relevant licence class.");
             }
 
             if (state.variation === 'yes') {
