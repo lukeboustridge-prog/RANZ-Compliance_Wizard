@@ -250,25 +250,46 @@
         /* --- PRINT STYLES --- */
         @media print {
             body { background-color: white; color: black; font-size: 12pt; display: block; }
+            
+            /* Hide Interface Elements */
             header, .actions, .btn, .terms-container, .terms-check-wrapper, .result-helper-text { display: none !important; }
             
+            /* Show Print-Only Header */
             .logo-bar { border-bottom: 2px solid var(--ranz-blue); padding: 0 0 1rem 0; margin-bottom: 2rem; }
             .doc-title-print { display: block; }
             
-            .job-details-grid { background: none; border: none; padding: 0; margin-bottom: 2rem; display: grid; gap: 1rem; }
+            /* Improve Job Details */
+            .job-details-grid {
+                background: none; border: none; padding: 0; margin-bottom: 2rem; display: grid; gap: 1rem;
+            }
             .form-group label { color: #000; font-size: 0.7rem; }
             .form-group input { border: none; border-bottom: 1px solid #000; padding: 0; font-weight: 600; width: 100%; border-radius: 0; }
             
-            .result-banner { background-color: white !important; color: black !important; border: 4px solid black; padding: 1rem; }
+            /* Result Banner Ink Saver */
+            .result-banner { 
+                background-color: white !important; 
+                color: black !important; 
+                border: 4px solid black; 
+                padding: 1rem;
+            }
             .res-consent { border-color: var(--ranz-red) !important; color: var(--ranz-red) !important; }
             .res-exempt { border-color: #28a745 !important; color: #28a745 !important; }
             
+            /* Card Reset */
             .container { margin: 0; max-width: 100%; padding: 0; }
             .card { box-shadow: none; border: none; padding: 0; margin: 0; display: block !important; }
+            
+            /* Hide all other cards except Results when printing */
             .card:not(#stepResults) { display: none !important; }
             
-            .warning-box, .case-study-box, .tech-alert { border: 1px solid #ccc; border-left-width: 5px; background-color: white !important; }
+            /* Ensure Alerts print well */
+            .warning-box, .case-study-box, .tech-alert {
+                border: 1px solid #ccc;
+                border-left-width: 5px;
+                background-color: white !important; /* Save Ink */
+            }
             
+            /* Typography */
             h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
             h3 { border-bottom: 1px solid #000; padding-bottom: 5px; margin-top: 1.5rem; }
             ul li { page-break-inside: avoid; }
@@ -351,11 +372,9 @@
             Select <strong>ALL</strong> that apply. These scenarios often trigger Code issues (E1/E2/H1/Structural) even in "maintenance" jobs.
         </div>
         <div class="option-group">
-            <label><input type="checkbox" name="complex" value="gutter" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Internal Gutter -> External (Envelope Change)</span><span class="option-desc">Converting a built-in/valley gutter. (Fascia systems are separate).</span></div></label>
+            <label><input type="checkbox" name="complex" value="gutter" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Internal Gutter -> External Conversion</span><span class="option-desc">Changing drainage system design (E1/E2).</span></div></label>
             <label><input type="checkbox" name="complex" value="skillion" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Skillion Roof (No Cavity)</span><span class="option-desc">Risk of condensation if ventilation not added.</span></div></label>
             <label><input type="checkbox" name="complex" value="h1_upgrade" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Insulation Upgrade (H1)</span><span class="option-desc">Installing thicker insulation (R6.6) or raising roof height.</span></div></label>
-            <label><input type="checkbox" name="complex" value="condensation" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Condensation Risks</span><span class="option-desc">Adding HRV, Central Heating, or removing Overlay Roofs.</span></div></label>
-            <label><input type="checkbox" name="complex" value="heavy_to_light" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Heavy to Light Roof Conversion</span><span class="option-desc">Concrete Tile -> Metal (Check Wind Uplift/Fixings).</span></div></label>
             <label><input type="checkbox" name="complex" value="solar" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Solar Panels</span><span class="option-desc">Adding weight/penetrations. Structural check required.</span></div></label>
             <label><input type="checkbox" name="complex" value="asbestos" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Pre-2000 / Asbestos Risk</span><span class="option-desc">Potential Health & Safety Stop Work.</span></div></label>
             <label><input type="checkbox" name="complex" value="none" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">None of the above</span><span class="option-desc">Standard re-roof or new build.</span></div></label>
@@ -588,13 +607,11 @@
             },
             complex: {
                 question: "Complex / Risks",
-                gutter: { ref: "Building Code E1/E2", text: "Converting an internal gutter to external changes the building envelope design (Clause E1)." },
+                gutter: { ref: "Building Code E1/E2", text: "Converting gutters alters drainage design. Consent required." },
                 skillion: { ref: "Building Code H1/E3", text: "Skillion roofs need ventilation to prevent condensation. Design advice recommended." },
                 solar: { ref: "Building Code B1", text: "Solar panels add weight. Structural check required." },
                 asbestos: { ref: "Health & Safety at Work Act", text: "Asbestos must be identified. Stop work order risk." },
                 h1_upgrade: { ref: "Building Code H1 / E2", text: "Upgrading insulation often increases roof depth, affecting flashing cover and building envelope height." },
-                condensation: { ref: "Building Code E3", text: "Changes to heating (HRV) or insulation alter moisture dynamics, increasing internal condensation risk." },
-                heavy_to_light: { ref: "Building Code B1 / Exemption 1", text: "Changing from heavy (Concrete) to light (Metal) is generally exempt but requires checking uplift fixings." },
                 none: { ref: "N/A", text: "Standard scope." }
             },
             age: {
@@ -774,7 +791,7 @@
             }
             
             if(state.complex.includes('asbestos')) {
-                warnings.push('<div class="tech-alert"><span class="box-title">Asbestos & The Law (Education)</span><strong>The Rule:</strong> Under the Health & Safety at Work Act, any building constructed pre-2000 is <em>presumed</em> to contain asbestos until proven otherwise.<br><br><strong>Note:</strong> Replacing Asbestos (Lightweight) with Metal (Lightweight) is generally <strong>Exempt</strong> from Consent, but is <strong>Notifiable Work</strong> to WorkSafe. Also check adjoining soffits/cladding.</div>');
+                warnings.push('<div class="tech-alert"><span class="box-title">Asbestos & The Law (Education)</span><strong>The Rule:</strong> Under the Health & Safety at Work Act, any building constructed pre-2000 is <em>presumed</em> to contain asbestos until proven otherwise.<br><br><strong>Risk:</strong> You generally cannot disturb materials (like soffits, decramastic tiles, or fibro) without a negative test. Fines for site contamination are severe.</div>');
             }
             
             // 1. COMBINED RISK CHECK (High Priority)
@@ -784,23 +801,16 @@
 
             // 2. SKILLION VENTILATION (Generic/Educational)
             if(state.complex.includes('skillion')) {
-                warnings.push('<div class="tech-alert"><span class="box-title">Skillion Ventilation (Education)</span><strong>The Physics:</strong> Skillion roofs lack a large roof cavity to buffer moisture. Horizontal purlins often block the 25mm air gap, acting as a "dam" for stagnant, moist air.<br><br><strong>The Solution:</strong> Installing <strong>purlins/battens</strong> on top of rafters to create a gap is the best practice. This work generally does <strong>not</strong> require LBP sign-off if the re-roof itself is exempt, but must meet Code.</div>');
+                // FIXED PER USER REQUEST: Removed suggestion of exemption for battens
+                warnings.push('<div class="tech-alert"><span class="box-title">Skillion Ventilation (Education)</span><strong>The Physics:</strong> Skillion roofs lack a large roof cavity to buffer moisture. Horizontal purlins often block the 25mm air gap, acting as a "dam" for stagnant, moist air.<br><br><strong>The Fix:</strong> Creating airflow often requires <strong>Counter-Battens</strong> or <strong>Vented Battens</strong>. <br><em><strong>Important:</strong> If this raises the roof profile (e.g. adding 20mm battens), it is a design change that likely triggers a Building Consent (RBW).</em></div>');
             }
 
             if(state.complex.includes('gutter')) {
-                warnings.push('<div class="tech-alert"><span class="box-title">Internal Gutters (Education)</span><strong>Why Consent is needed:</strong> Converting an internal gutter to an external one changes the building\'s water management design (Clause E1). This is not "maintenance". <br><strong>Note:</strong> Replacing external fascia systems (e.g. Klass/Taylor) is generally exempt maintenance.</div>');
+                warnings.push('<div class="tech-alert"><span class="box-title">Internal Gutters (Education)</span><strong>Why Consent is needed:</strong> Converting an internal gutter to an external one changes the building\'s water management design (Clause E1). This is not "maintenance"; it is a modification of the building envelope.</div>');
             }
             
             if(state.complex.includes('h1_upgrade')) {
                 warnings.push('<div class="warning-box"><span class="box-title">H1 Height Check</span><strong>Warning:</strong> Thicker insulation often raises the roof profile. Check that your flashings still provide compliant cover (E2). If the roof plane changes height, this is a structural change (Minor Variation or Consent required).</div>');
-            }
-            
-            if(state.complex.includes('condensation')) {
-                warnings.push('<div class="tech-alert"><span class="box-title">Condensation Risk (HRV/Insulation)</span><strong>Why this matters:</strong> Changes to heating (HRV/Heat Pumps) or insulation levels alter the dew point within the roof structure. Removing an old "Overlay Roof" can also expose the home to new condensation cycles. <br><strong>Advice:</strong> Ensure ventilation is adequate for the new thermal environment.</div>');
-            }
-            
-            if(state.complex.includes('heavy_to_light')) {
-                warnings.push('<div class="tech-alert"><span class="box-title">Heavy to Light Conversion (Concrete -> Metal)</span><strong>Exemption Status:</strong> MBIE guidance typically classifies this as Exempt (Schedule 1) if it doesn\'t affect structure.<br><strong>Critical Check:</strong> You MUST ensure the new roof fixings meet <strong>Wind Uplift</strong> requirements (Clause B1). The lighter roof is more prone to lifting than the heavy tiles it replaced.</div>');
             }
 
             if(state.consent_status==='no_check' && isReq) warnings.push('<div class="case-study-box"><span class="box-title">Danger</span>Failing to check for consent is negligence (<em>Corbett-Pearson</em>). Verify now.</div>');
