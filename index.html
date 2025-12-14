@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RANZ Compliance Wizard</title>
+    <title>RANZ Compliance Assessment</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -35,8 +35,10 @@
             border-bottom: 1px solid #ddd;
             display: flex;
             align-items: center;
+            justify-content: space-between;
         }
-        .logo-bar img { max-height: 50px; width: auto; display: block; }
+        .logo-bar img { max-height: 60px; width: auto; display: block; }
+        .doc-title-print { display: none; font-weight: 800; font-size: 1.2rem; color: var(--ranz-blue); text-transform: uppercase; }
 
         /* --- HEADER --- */
         header {
@@ -106,6 +108,28 @@
             padding-bottom: 0.8rem;
         }
 
+        /* --- JOB DETAILS FORM (New) --- */
+        .job-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 4px;
+            border: 1px solid #e9ecef;
+        }
+        .form-group { margin-bottom: 0.5rem; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 700; color: #666; margin-bottom: 4px; text-transform: uppercase; }
+        .form-group input { 
+            width: 100%; 
+            padding: 8px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+
         /* --- ALERTS & BOXES --- */
         .info-box, .warning-box, .case-study-box, .intro-box, .tech-alert {
             padding: 1rem;
@@ -154,16 +178,11 @@
         }
         .radio-label:hover { border-color: var(--ranz-silver); background-color: #fafafa; }
         
-        input[type="radio"], input[type="checkbox"] { display: none; }
-        
-        /* Checked state for Radio & Checkbox */
         input:checked + .radio-label {
             border-color: var(--ranz-blue);
             background-color: #f0f7fb;
             box-shadow: 0 0 0 1px var(--ranz-blue) inset;
         }
-        
-        /* Multiple Selection Indicator */
         input[type="checkbox"]:checked + .radio-label::after {
             content: "✔ Selected";
             float: right;
@@ -171,6 +190,7 @@
             font-weight: 800;
             color: var(--ranz-blue);
         }
+        input[type="radio"], input[type="checkbox"] { display: none; }
 
         .option-title { font-weight: 700; display: block; margin-bottom: 3px; font-size: 1rem; }
         .option-desc { font-weight: 400; font-size: 0.85rem; color: #666; }
@@ -206,7 +226,7 @@
         .checklist li { margin-bottom: 0.8rem; padding-bottom: 0.8rem; border-bottom: 1px solid #eee; }
         
         /* Legislation Breakdown */
-        .leg-breakdown-area { margin-top: 3rem; border-top: 2px solid #eee; padding-top: 2rem; }
+        .leg-breakdown-area { margin-top: 3rem; border-top: 2px solid #eee; padding-top: 2rem; page-break-inside: avoid; }
         .leg-block {
             border: 1px solid #eee;
             border-left: 4px solid var(--ranz-charcoal);
@@ -214,6 +234,7 @@
             margin-bottom: 1rem;
             border-radius: 4px;
             background: #fafafa;
+            page-break-inside: avoid;
         }
         .leg-question { font-weight: 800; color: var(--ranz-blue); margin-bottom: 0.4rem; font-size: 0.85rem; text-transform: uppercase; border-bottom: 1px solid #e0e0e0; padding-bottom: 4px; }
         .leg-ref { font-weight: 700; color: var(--ranz-red); font-size: 0.9rem; margin-bottom: 0.4rem; display: block; }
@@ -226,10 +247,52 @@
         
         footer { text-align: center; padding: 2rem; font-size: 0.8rem; color: #888; }
         
+        /* --- PRINT STYLES --- */
         @media print {
-            .actions, .btn { display: none !important; }
-            .card { box-shadow: none; border: none; }
-            body { background: white; }
+            body { background-color: white; color: black; font-size: 12pt; display: block; }
+            
+            /* Hide Interface Elements */
+            header, .actions, .btn, .terms-container, .terms-check-wrapper, .result-helper-text { display: none !important; }
+            
+            /* Show Print-Only Header */
+            .logo-bar { border-bottom: 2px solid var(--ranz-blue); padding: 0 0 1rem 0; margin-bottom: 2rem; }
+            .doc-title-print { display: block; }
+            
+            /* Improve Job Details */
+            .job-details-grid {
+                background: none; border: none; padding: 0; margin-bottom: 2rem; display: grid; gap: 1rem;
+            }
+            .form-group label { color: #000; font-size: 0.7rem; }
+            .form-group input { border: none; border-bottom: 1px solid #000; padding: 0; font-weight: 600; width: 100%; border-radius: 0; }
+            
+            /* Result Banner Ink Saver */
+            .result-banner { 
+                background-color: white !important; 
+                color: black !important; 
+                border: 4px solid black; 
+                padding: 1rem;
+            }
+            .res-consent { border-color: var(--ranz-red) !important; color: var(--ranz-red) !important; }
+            .res-exempt { border-color: #28a745 !important; color: #28a745 !important; }
+            
+            /* Card Reset */
+            .container { margin: 0; max-width: 100%; padding: 0; }
+            .card { box-shadow: none; border: none; padding: 0; margin: 0; display: block !important; }
+            
+            /* Hide all other cards except Results when printing */
+            .card:not(#stepResults) { display: none !important; }
+            
+            /* Ensure Alerts print well */
+            .warning-box, .case-study-box, .tech-alert {
+                border: 1px solid #ccc;
+                border-left-width: 5px;
+                background-color: white !important; /* Save Ink */
+            }
+            
+            /* Typography */
+            h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+            h3 { border-bottom: 1px solid #000; padding-bottom: 5px; margin-top: 1.5rem; }
+            ul li { page-break-inside: avoid; }
         }
     </style>
 </head>
@@ -237,6 +300,7 @@
 
 <div class="logo-bar">
     <img src="logo.png" alt="RANZ Logo">
+    <div class="doc-title-print">Compliance Assessment Record</div>
 </div>
 
 <header>
@@ -258,9 +322,8 @@
         <h3>Terms & Conditions of Use</h3>
         <div class="terms-container">
             <p><strong>1. No Data Storage or Verification:</strong> RANZ does not see, store, keep, endorse, or verify any of the information you enter into this tool. All data is processed locally on your device.</p>
-            <p><strong>2. Membership Status:</strong> Usage of this tool does not imply that the user is a member of RANZ. Just because someone is using this application does not mean they are a RANZ member. To verify membership, you must check the official directory at ranz.co.nz.</p>
-            <p><strong>3. Not Legal Advice:</strong> This tool is a guide based on the Building Act 2004 and BPB decisions. It is not a substitute for professional legal advice or specific guidance from your local Building Consent Authority (BCA).</p>
-            <p><strong>4. Liability:</strong> RANZ accepts no liability for actions taken based on the outputs of this tool.</p>
+            <p><strong>2. Membership Status:</strong> Usage of this tool does not imply that the user is a member of RANZ.</p>
+            <p><strong>3. Not Legal Advice:</strong> This tool is a guide based on the Building Act 2004 and BPB decisions.</p>
         </div>
         <div class="terms-check-wrapper">
             <input type="checkbox" id="terms-check">
@@ -288,7 +351,6 @@
         <div class="case-study-box">
             <div class="box-title">Design Changes = No Exemption</div>
             In <em>Newton [2023]</em>, a roofer replaced a dormer but removed parapets. The Board ruled this was <strong>not</strong> "like-for-like". If you change the design, Schedule 1 does not apply.
-            <div class="citation">Newton [2023] BPB CB26223</div>
         </div>
         <p><strong>What is the nature of the work?</strong></p>
         <div class="option-group">
@@ -306,9 +368,8 @@
         <h2>Step 1b: Complex Scenarios & Risks</h2>
         <div class="tech-alert">
             <div class="box-title">High Risk Areas</div>
-            Select <strong>ALL</strong> that apply. These scenarios often trigger Code issues (E1/E2/H1/Structural) even in "maintenance" jobs.
+            Select <strong>ALL</strong> that apply. These scenarios often trigger Code issues (E1/E2/H1/Structural).
         </div>
-        <p><strong>Does the job involve any of these specific scenarios?</strong></p>
         <div class="option-group">
             <label><input type="checkbox" name="complex" value="gutter" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Internal Gutter -> External Conversion</span><span class="option-desc">Changing drainage system design (E1/E2).</span></div></label>
             <label><input type="checkbox" name="complex" value="skillion" onclick="handleMulti(this)"><div class="radio-label"><span class="option-title">Skillion Roof (No Cavity)</span><span class="option-desc">Risk of condensation if ventilation not added.</span></div></label>
@@ -344,8 +405,7 @@
         <h2>Step 2: Consent Status</h2>
         <div class="case-study-box">
             <div class="box-title">Duty to Check</div>
-            In <em>Corbett-Pearson [2024]</em>, a roofer assumed a consent was in place but didn't check. The Board ruled the LBP is in the best position to stop unconsented work and failing to check is negligent.
-            <div class="citation">Corbett-Pearson [2024] BPB 26512</div>
+            In <em>Corbett-Pearson [2024]</em>, a roofer assumed a consent was in place but didn't check. The Board ruled the LBP is in the best position to stop unconsented work.
         </div>
         <p><strong>Has a Consent been issued?</strong></p>
         <div class="option-group">
@@ -381,7 +441,6 @@
         <div class="case-study-box">
             <div class="box-title">"My way is better" Trap</div>
             In <em>Langdon [2025]</em>, a roofer was fined for using a "better" method without approval. In <em>Smith [2023]</em>, product substitution was a key issue.
-            <div class="citation">Langdon [2025] BPB 26658</div>
         </div>
         <p><strong>Are you deviating from the Plans, altering an existing configuration, or substituting products?</strong></p>
         <div class="option-group">
@@ -434,7 +493,6 @@
         <div class="case-study-box">
             <div class="box-title">Remote Supervision</div>
             In <em>Horrack [2024]</em>, the Board ruled "Remote supervision does not mean NO supervision".
-            <div class="citation">Horrack [2024] BPB 26456</div>
         </div>
         <p><strong>How are you supervising this job?</strong></p>
         <div class="option-group">
@@ -453,7 +511,6 @@
         <div class="warning-box">
             <div class="box-title">Withholding Paperwork</div>
             In <em>Moyes [2025]</em>, an LBP was fined for withholding a Record of Work due to unpaid invoices.
-            <div class="citation">Moyes [2025] BPB 26670</div>
         </div>
         <p><strong>What is the job status?</strong></p>
         <div class="option-group">
@@ -469,14 +526,37 @@
     </div>
 
     <div class="card" id="stepResults">
+        
+        <div id="job-details-print" class="job-details-grid">
+            <div class="form-group">
+                <label>Client / Site Name</label>
+                <input type="text" placeholder="e.g. Smith Residence">
+            </div>
+            <div class="form-group">
+                <label>Job Address</label>
+                <input type="text" placeholder="e.g. 123 Main St">
+            </div>
+            <div class="form-group">
+                <label>Job Reference #</label>
+                <input type="text" placeholder="e.g. JOB-2025-01">
+            </div>
+            <div class="form-group">
+                <label>Date</label>
+                <input type="text" id="print-date">
+            </div>
+        </div>
+
         <div id="result-banner" class="result-banner"></div>
+        
         <h3>Critical Compliance Checklist:</h3>
+        <p class="result-helper-text" style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Complete these checks before proceeding.</p>
         <ul class="checklist" id="final-checklist"></ul>
+        
         <div id="warnings-section" style="margin-top: 2rem;"></div>
         
         <div class="leg-breakdown-area">
             <h3>Legislation & Rules Breakdown</h3>
-            <p style="margin-bottom:1rem; font-size:0.9rem; color:#666;">Detailed reference for the logic applied to your assessment.</p>
+            <p class="result-helper-text" style="margin-bottom:1rem; font-size:0.9rem; color:#666;">Detailed reference for the logic applied to your assessment.</p>
             <div id="legislation-breakdown"></div>
         </div>
 
@@ -492,6 +572,9 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         
+        // Auto-fill Date
+        document.getElementById('print-date').value = new Date().toLocaleDateString('en-NZ');
+
         var state = { pathway:null, scope:null, complex:[], age:null, consent_status:null, b_type:null, variation:null, discovery:null, licence:null, supervision:null, completion:null };
 
         // Terms
@@ -758,7 +841,6 @@
 
             // CHECKLIST
             if (state.b_type === 'residential') {
-                // UPDATED PER FEEDBACK
                 reasons.push("<strong>Residential Rule:</strong> This work is Restricted Building Work (RBW). It must be supervised by an LBP, with the relevant licence class.");
             }
 
