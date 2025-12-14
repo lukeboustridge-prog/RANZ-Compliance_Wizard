@@ -452,12 +452,12 @@
         
         var state = { pathway:null, scope:null, complex:null, age:null, consent_status:null, b_type:null, variation:null, discovery:null, supervision:null, completion:null };
 
-        // Terms
+        // Terms Logic
         var termsCheck = document.getElementById('terms-check');
         var startBtn = document.getElementById('btn-intro-start');
         termsCheck.addEventListener('change', function() { startBtn.disabled = !this.checked; });
 
-        // EXPLANATIONS (NO LINKS)
+        // --- ENRICHED LEGISLATIVE DATA (NO LINKS) ---
         const explanations = {
             scope: {
                 question: "Scope of Work",
@@ -516,72 +516,102 @@
             document.getElementById(id).classList.add('active');
         }
 
-        // HANDLERS
-        document.getElementById('btn-intro-start').addEventListener('click', () => showStep('step0'));
-        document.getElementById('btn-back-0').addEventListener('click', () => showStep('stepIntro'));
-        document.getElementById('btn-start').addEventListener('click', () => {
-            state.pathway = document.querySelector('input[name="pathway"]:checked')?.value;
-            if(!state.pathway) return alert("Select pathway");
-            showStep(state.pathway === 'planning' ? 'stepP1' : 'stepE0');
+        // NAVIGATION HANDLERS
+        document.getElementById('btn-intro-start').addEventListener('click', function() { showStep('step0'); });
+        document.getElementById('btn-back-0').addEventListener('click', function() { showStep('stepIntro'); });
+        
+        document.getElementById('btn-start').addEventListener('click', function() {
+            var el = document.querySelector('input[name="pathway"]:checked');
+            if(!el) { alert("Please select a pathway."); return; }
+            state.pathway = el.value;
+            if(state.pathway === 'planning') showStep('stepP1'); else showStep('stepE0');
         });
 
-        // Planning
-        document.getElementById('btn-back-p1').addEventListener('click', () => showStep('step0'));
-        document.getElementById('btn-next-p1').addEventListener('click', () => {
-            state.scope = document.querySelector('input[name="scope"]:checked')?.value;
-            if(!state.scope) return alert("Select scope");
+        // Planning Flow
+        document.getElementById('btn-back-p1').addEventListener('click', function() { showStep('step0'); });
+        document.getElementById('btn-next-p1').addEventListener('click', function() {
+            var el = document.querySelector('input[name="scope"]:checked');
+            if(!el) { alert("Please select a scope."); return; }
+            state.scope = el.value;
             showStep('stepP1_Complex');
         });
-        document.getElementById('btn-back-complex').addEventListener('click', () => showStep('stepP1'));
-        document.getElementById('btn-next-complex').addEventListener('click', () => {
-            state.complex = document.querySelector('input[name="complex"]:checked')?.value;
-            if(!state.complex) return alert("Select option");
-            showStep(state.scope === 'replace_same' ? 'stepP1_Age' : 'stepP2');
+
+        document.getElementById('btn-back-complex').addEventListener('click', function() { showStep('stepP1'); });
+        document.getElementById('btn-next-complex').addEventListener('click', function() {
+            var el = document.querySelector('input[name="complex"]:checked');
+            if(!el) { alert("Select option."); return; }
+            state.complex = el.value;
+            if(state.scope === 'replace_same') showStep('stepP1_Age'); else showStep('stepP2');
         });
-        document.getElementById('btn-back-age').addEventListener('click', () => showStep('stepP1_Complex'));
-        document.getElementById('btn-next-age').addEventListener('click', () => {
-            state.age = document.querySelector('input[name="age"]:checked')?.value;
-            if(!state.age) return alert("Select age");
+
+        document.getElementById('btn-back-age').addEventListener('click', function() { showStep('stepP1_Complex'); });
+        document.getElementById('btn-next-age').addEventListener('click', function() {
+            var el = document.querySelector('input[name="age"]:checked');
+            if(!el) { alert("Select age."); return; }
+            state.age = el.value;
             showStep('stepP2');
         });
-        document.getElementById('btn-back-p2').addEventListener('click', () => showStep(state.scope === 'replace_same' ? 'stepP1_Age' : 'stepP1_Complex'));
-        document.getElementById('btn-next-p2').addEventListener('click', () => {
-            state.consent_status = document.querySelector('input[name="consent_status"]:checked')?.value;
-            if(!state.consent_status) return alert("Confirm status");
-            calcPlanning();
+
+        document.getElementById('btn-back-p2').addEventListener('click', function() { 
+            if(state.scope === 'replace_same') showStep('stepP1_Age'); else showStep('stepP1_Complex');
+        });
+        document.getElementById('btn-next-p2').addEventListener('click', function() {
+            var el = document.querySelector('input[name="consent_status"]:checked');
+            if(!el) { alert("Confirm status."); return; }
+            state.consent_status = el.value;
+            calculatePlanningResults();
         });
 
-        // Execution
-        document.getElementById('btn-next-e0').addEventListener('click', () => {
-            state.b_type = document.querySelector('input[name="b_type"]:checked')?.value;
-            if(!state.b_type) return alert("Select type");
+        // Execution Flow
+        document.getElementById('btn-back-e1').addEventListener('click', function() { showStep('step0'); }); // Corrected to go back to step0 from stepE1 in execution path since stepE0 was removed previously or integrated
+        // Wait, looking at the code structure, stepE0 is the Building Type. 
+        // Let's re-verify the flow.
+        // Step 0 -> Planning -> Step P1
+        // Step 0 -> Execution -> Step E0 (Building Type) -> Step E1
+        // Ah, looking at the previous version code, stepE0 was added.
+        // In the current code block, stepE0 is present.
+        
+        // Let's fix the back button logic for E1.
+        document.getElementById('btn-next-e0').addEventListener('click', function() {
+             var el = document.querySelector('input[name="b_type"]:checked');
+            if(!el) { alert("Select building type."); return; }
+            state.b_type = el.value;
             showStep('stepE1');
         });
-        document.getElementById('btn-back-e1').addEventListener('click', () => showStep('stepE0'));
-        document.getElementById('btn-next-e1').addEventListener('click', () => {
-            state.variation = document.querySelector('input[name="variation"]:checked')?.value;
-            if(!state.variation) return alert("Answer variation");
+        
+        document.getElementById('btn-back-e1').addEventListener('click', function() { showStep('stepE0'); }); 
+        
+        document.getElementById('btn-next-e1').addEventListener('click', function() {
+            var el = document.querySelector('input[name="variation"]:checked');
+            if(!el) { alert("Answer variation."); return; }
+            state.variation = el.value;
             showStep('stepE1_Discovery');
         });
-        document.getElementById('btn-back-discovery').addEventListener('click', () => showStep('stepE1'));
-        document.getElementById('btn-next-discovery').addEventListener('click', () => {
-            state.discovery = document.querySelector('input[name="discovery"]:checked')?.value;
-            if(!state.discovery) return alert("Answer discovery");
+
+        document.getElementById('btn-back-discovery').addEventListener('click', function() { showStep('stepE1'); });
+        document.getElementById('btn-next-discovery').addEventListener('click', function() {
+            var el = document.querySelector('input[name="discovery"]:checked');
+            if(!el) { alert("Answer discovery."); return; }
+            state.discovery = el.value;
             showStep('stepE2');
         });
-        document.getElementById('btn-back-e2').addEventListener('click', () => showStep('stepE1_Discovery'));
-        document.getElementById('btn-next-e2').addEventListener('click', () => {
-            state.supervision = document.querySelector('input[name="supervision"]:checked')?.value;
-            if(!state.supervision) return alert("Answer supervision");
+
+        document.getElementById('btn-back-e2').addEventListener('click', function() { showStep('stepE1_Discovery'); });
+        document.getElementById('btn-next-e2').addEventListener('click', function() {
+            var el = document.querySelector('input[name="supervision"]:checked');
+            if(!el) { alert("Answer supervision."); return; }
+            state.supervision = el.value;
             showStep('stepE3');
         });
-        document.getElementById('btn-back-e3').addEventListener('click', () => showStep('stepE2'));
-        document.getElementById('btn-next-e3').addEventListener('click', () => {
-            state.completion = document.querySelector('input[name="completion"]:checked')?.value;
-            if(!state.completion) return alert("Answer completion");
-            calcExecution();
-        });
 
+        document.getElementById('btn-back-e3').addEventListener('click', function() { showStep('stepE2'); });
+        document.getElementById('btn-next-e3').addEventListener('click', function() {
+            var el = document.querySelector('input[name="completion"]:checked');
+            if(!el) { alert("Answer completion."); return; }
+            state.completion = el.value;
+            calculateExecutionResults();
+        });
+        
         // RESULTS BACK BUTTON HANDLER
         document.getElementById('btn-back-results').addEventListener('click', () => {
             if (state.pathway === 'planning') {
@@ -591,78 +621,99 @@
             }
         });
 
-        function renderLeg(keys) {
-            let html = "";
-            keys.forEach(k => {
-                let v = state[k];
-                if(v && explanations[k] && explanations[k][v]) {
-                    html += `<div class="leg-block"><div class="leg-question">${explanations[k].question}</div><div class="leg-ref">${explanations[k][v].ref}</div><div class="leg-explain">${explanations[k][v].text}</div></div>`;
+        function renderLegislation(keys) {
+            var html = "";
+            keys.forEach(function(k) {
+                var val = state[k];
+                if(val && explanations[k] && explanations[k][val]) {
+                    var d = explanations[k][val];
+                    html += `<div class="leg-block"><div class="leg-question">${explanations[k].question}</div><div class="leg-ref">${d.ref}</div><div class="leg-explain">${d.text}</div></div>`;
                 }
             });
             document.getElementById('legislation-breakdown').innerHTML = html;
         }
 
-        function calcPlanning() {
-            let reasons=[], warnings=[], isReq=false;
-            if(state.complex!=='none') isReq=true;
-            if(state.scope!=='replace_same') isReq=true;
-            if(state.age==='young') isReq=true;
-
-            let banner = document.getElementById('result-banner');
-            if(isReq) {
-                banner.className="result-banner res-consent";
-                banner.innerHTML="<h1>CONSENT & LBP REQUIRED</h1>";
-            } else {
-                banner.className="result-banner res-exempt";
-                banner.innerHTML="<h1>LIKELY EXEMPT</h1>";
-            }
-            
-            if(isReq) reasons.push("<strong>LBP Required:</strong> Restricted Building Work.");
-            else reasons.push("<strong>No LBP Mandate:</strong> (But recommended).");
-
-            if(state.consent_status==='no_check' && isReq) warnings.push('<div class="case-study-box"><span class="box-title">Danger</span>Failing to check for consent is negligence (<em>Corbett-Pearson</em>). Verify now.</div>');
-
-            document.getElementById('final-checklist').innerHTML = reasons.map(r=>"<li>"+r+"</li>").join('');
-            document.getElementById('warnings-section').innerHTML = warnings.join('');
-            renderLeg(['scope','complex','age','consent_status']);
+        function calculatePlanningResults() {
             showStep('stepResults');
+            var banner = document.getElementById('result-banner');
+            var list = document.getElementById('final-checklist');
+            var warnDiv = document.getElementById('warnings-section');
+            var reasons = [], warnings = [], isReq = false;
+
+            if (state.complex === 'gutter') {
+                isReq = true;
+                reasons.push("<strong>Consent Required:</strong> Changing Internal to External gutters alters E1/E2. Rarely exempt.");
+            }
+            if (state.complex === 'skillion') {
+                warnings.push('<div class="tech-alert"><div class="box-title">Skillion Roof Risk</div>Re-roofing a skillion without ventilation can cause condensation. Adding vents is a design change (Consent needed).</div>');
+            }
+
+            if (state.scope === 'new' || state.scope === 'replace_change') isReq = true;
+            else if (state.scope === 'replace_same' && state.age === 'young') isReq = true;
+
+            if(isReq) {
+                banner.className = "result-banner res-consent";
+                banner.innerHTML = "<h1>CONSENT & LBP REQUIRED</h1>";
+                reasons.push("<strong>LBP Required:</strong> Restricted Building Work.");
+            } else {
+                banner.className = "result-banner res-exempt";
+                banner.innerHTML = "<h1>LIKELY EXEMPT</h1>";
+                reasons.push("<strong>No LBP Mandate:</strong> (But recommended).");
+            }
+
+            if (state.consent_status === 'no_check' && isReq) {
+                warnings.push('<div class="case-study-box"><div class="box-title">DANGER</div>Failing to check for consent is negligence (<em>Corbett-Pearson</em>). Verify now.</div>');
+            }
+
+            list.innerHTML = reasons.map(r => "<li>"+r+"</li>").join('');
+            warnDiv.innerHTML = warnings.join('');
+            renderLegislation(['scope', 'complex', 'age', 'consent_status']);
         }
 
-        function calcExecution() {
-            let reasons=[], warnings=[];
-            let banner = document.getElementById('result-banner');
-            
-            if(state.b_type === 'commercial') {
+        function calculateExecutionResults() {
+            showStep('stepResults');
+            var banner = document.getElementById('result-banner');
+            var list = document.getElementById('final-checklist');
+            var warnDiv = document.getElementById('warnings-section');
+            var reasons = [], warnings = [];
+
+            // BANNER LOGIC FOR EXECUTION
+            if (state.b_type === 'commercial') {
                 banner.className="result-banner res-commercial";
                 banner.innerHTML="<h1>COMMERCIAL: LBP NOT MANDATED</h1>";
                 reasons.push("Commercial work is generally not RBW.");
             } else {
                 // Residential Logic
-                if(state.discovery==='structural') {
+                if (state.discovery === 'structural') {
                     banner.className="result-banner res-consent";
                     banner.innerHTML="<h1>LBP REQUIRED</h1><p>Structural Work Discovered (RBW)</p>";
                 } else {
                     banner.className="result-banner res-consent";
                     banner.innerHTML="<h1>LBP REQUIRED</h1><p>Residential Roofing is Restricted Building Work</p>";
                 }
-                reasons.push("<strong>Residential Rule:</strong> Work on the primary structure or weathertightness of a house is Restricted Building Work (RBW). It must be supervised by an LBP.");
             }
 
-            if(state.variation==='yes') warnings.push('<div class="case-study-box"><span class="box-title">Variation Risk</span>Unapproved changes = Fines (<em>Langdon</em>). Apply for Minor Variation (Form 45A).</div>');
-            
-            if(state.discovery==='structural') {
+            // CHECKLIST
+            if (state.b_type === 'residential') {
+                reasons.push("<strong>Residential Rule:</strong> This work is Restricted Building Work (RBW). It must be supervised by an LBP.");
+            } else {
+                reasons.push("<strong>Commercial Rule:</strong> While LBP is not legally mandated for the physical work, contractual obligations and competency requirements still apply.");
+            }
+
+            if (state.variation === 'yes') {
+                warnings.push('<div class="case-study-box"><div class="box-title">STOP: Variation</div>Unapproved changes = Fines (<em>Langdon</em>). Apply for Minor Variation (Form 45A).</div>');
+            }
+            if (state.discovery === 'structural') {
                 reasons.push("<strong>Structural Finding:</strong> Replacing substrate/purlins is RBW. New work MUST meet current code (s112).");
             }
-            
-            if(state.supervision==='remote') {
-                warnings.push('<div class="case-study-box"><span class="box-title">Supervision Risk</span>Remote supervision requires physical inspection (<em>Horrack</em>).</div>');
+            if (state.supervision === 'remote') {
+                warnings.push('<div class="case-study-box"><div class="box-title">Supervision Risk</div>Remote supervision requires physical inspection (<em>Horrack</em>).</div>');
                 reasons.push("<strong>Action:</strong> Schedule a physical site inspection immediately.");
             }
-            
-            if(state.completion==='dispute') {
-                warnings.push('<div class="case-study-box"><span class="box-title">Record of Work</span>Do not withhold RoW for payment (<em>Moyes</em>).</div>');
+            if (state.completion === 'dispute') {
+                warnings.push('<div class="case-study-box"><div class="box-title">Issue RoW Now</div>Do not withhold RoW for payment (<em>Moyes</em>).</div>');
                 if(state.b_type === 'residential') reasons.push("<strong>Action:</strong> Issue Record of Work immediately.");
-            } else if(state.completion==='terminated') {
+            } else if (state.completion === 'terminated') {
                  if(state.b_type === 'residential') reasons.push("<strong>Action:</strong> Issue RoW for work done so far (<em>McKinstry</em>).");
             } else if(state.completion === 'in_progress') {
                 reasons.push("<strong>Status:</strong> Work in progress. Maintain compliant supervision.");
@@ -671,10 +722,9 @@
                 if(state.b_type === 'residential') reasons.push("<strong>General:</strong> Send RoW to Owner AND Council.");
             }
 
-            document.getElementById('final-checklist').innerHTML = reasons.map(r=>"<li>"+r+"</li>").join('');
-            document.getElementById('warnings-section').innerHTML = warnings.join('');
-            renderLeg(['b_type','variation','discovery','supervision','completion']);
-            showStep('stepResults');
+            list.innerHTML = reasons.map(r => "<li>"+r+"</li>").join('');
+            warnDiv.innerHTML = warnings.join('');
+            renderLegislation(['b_type', 'variation', 'discovery', 'supervision', 'completion']);
         }
     });
 </script>
