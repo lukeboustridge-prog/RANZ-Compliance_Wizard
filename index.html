@@ -186,8 +186,6 @@
             background-color: #f0f7fb;
             box-shadow: 0 0 0 1px var(--ranz-blue) inset;
         }
-        
-        /* Multiple Selection Indicator */
         input[type="checkbox"]:checked + .radio-label::after {
             content: "✔ Selected";
             float: right;
@@ -356,7 +354,6 @@
         <div class="case-study-box">
             <div class="box-title">Design Changes = No Exemption</div>
             In <em>Newton [2023]</em>, a roofer replaced a dormer but removed parapets. The Board ruled this was <strong>not</strong> "like-for-like". If you change the design, Schedule 1 does not apply.
-            <div class="citation">Newton [2023] BPB CB26223</div>
         </div>
         <p><strong>What is the nature of the work?</strong></p>
         <div class="option-group">
@@ -412,8 +409,7 @@
         <h2>Step 2: Consent Status</h2>
         <div class="case-study-box">
             <div class="box-title">Duty to Check</div>
-            In <em>Corbett-Pearson [2024]</em>, a roofer assumed a consent was in place but didn't check. The Board ruled the LBP is in the best position to stop unconsented work and failing to check is negligent.
-            <div class="citation">Corbett-Pearson [2024] BPB 26512</div>
+            In <em>Corbett-Pearson [2024]</em>, a roofer assumed a consent was in place but didn't check. The Board ruled the LBP is in the best position to stop unconsented work.
         </div>
         <p><strong>Has a Consent been issued?</strong></p>
         <div class="option-group">
@@ -449,7 +445,6 @@
         <div class="case-study-box">
             <div class="box-title">"My way is better" Trap</div>
             In <em>Langdon [2025]</em>, a roofer was fined for using a "better" method without approval. In <em>Smith [2023]</em>, product substitution was a key issue.
-            <div class="citation">Langdon [2025] BPB 26658</div>
         </div>
         <p><strong>Are you deviating from the Plans, altering an existing configuration, or substituting products?</strong></p>
         <div class="option-group">
@@ -502,7 +497,6 @@
         <div class="case-study-box">
             <div class="box-title">Remote Supervision</div>
             In <em>Horrack [2024]</em>, the Board ruled "Remote supervision does not mean NO supervision".
-            <div class="citation">Horrack [2024] BPB 26456</div>
         </div>
         <p><strong>How are you supervising this job?</strong></p>
         <div class="option-group">
@@ -521,7 +515,6 @@
         <div class="warning-box">
             <div class="box-title">Withholding Paperwork</div>
             In <em>Moyes [2025]</em>, an LBP was fined for withholding a Record of Work due to unpaid invoices.
-            <div class="citation">Moyes [2025] BPB 26670</div>
         </div>
         <p><strong>What is the job status?</strong></p>
         <div class="option-group">
@@ -811,8 +804,8 @@
 
             // 2. SKILLION VENTILATION (Generic/Educational)
             if(state.complex.includes('skillion')) {
-                // FIXED PER USER REQUEST: Removed suggestion of exemption for battens
-                warnings.push('<div class="tech-alert"><span class="box-title">Skillion Ventilation (Education)</span><strong>The Physics:</strong> Skillion roofs lack a large roof cavity to buffer moisture. Horizontal purlins often block the 25mm air gap, acting as a "dam" for stagnant, moist air.<br><br><strong>The Fix:</strong> Creating airflow often requires <strong>Counter-Battens</strong> or <strong>Vented Battens</strong>. <br><em><strong>Important:</strong> If this raises the roof profile (e.g. adding 20mm battens), it is a design change that likely triggers a Building Consent (RBW).</em></div>');
+                // FIXED PER USER REQUEST: Expanded options, kept consent warning
+                warnings.push('<div class="tech-alert"><span class="box-title">Skillion Ventilation (Education)</span><strong>The Physics:</strong> Skillion roofs lack a large roof cavity to buffer moisture. Horizontal purlins often block the 25mm air gap, acting as a "dam" for stagnant, moist air.<br><br><strong>The Fix:</strong> You need to consider ventilation, including <strong>Counter-Battens</strong>, <strong>Vented Battens</strong>, or <strong>Fascia/Ridge Vents</strong>. <br><em><strong>Important:</strong> If this raises the roof profile (e.g. adding 20mm battens), it is a design change that likely triggers a Building Consent (RBW).</em></div>');
             }
 
             if(state.complex.includes('gutter')) {
